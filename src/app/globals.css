@@ -1,0 +1,265 @@
+@import "tailwindcss";
+
+:root {
+  color-scheme: light;
+  --background: 218 66% 97%;
+  --foreground: 228 30% 15%;
+  --muted: 214 55% 94%;
+  --muted-foreground: 226 20% 38%;
+  --accent: 199 92% 90%;
+  --accent-foreground: 214 36% 26%;
+  --border: 219 42% 92%;
+  --input: 220 40% 90%;
+  --ring: 229 87% 63%;
+  --radius: 1.5rem;
+  --card: 0 0% 100%;
+  --card-foreground: 228 30% 15%;
+  --primary: 229 87% 63%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 37 100% 87%;
+  --secondary-foreground: 222 44% 18%;
+  --info: 192 95% 88%; 
+  --glass-surface: rgba(255, 255, 255, 0.8);
+  --glass-surface-strong: rgba(255, 255, 255, 0.95);
+  --glass-border: rgba(255, 255, 255, 0.7);
+  --glass-shadow-strong: rgba(36, 52, 120, 0.6);
+  --glass-shadow-soft: rgba(36, 52, 120, 0.4);
+  --shadow-primary: rgba(86, 112, 255, 0.6);
+  --shadow-secondary: rgba(254, 198, 106, 0.9);
+  --shadow-elevated: rgba(32, 55, 125, 0.6);
+  --logo-gradient-start: 229 87% 70%;
+  --logo-gradient-mid: 229 87% 63%;
+  --logo-gradient-end: 214 89% 70%;
+  --logo-shadow: rgba(86, 112, 255, 0.8);
+  --footer-background: 225 40% 18%;
+  --footer-highlight-from: rgba(103, 124, 255, 0.35);
+  --footer-highlight-via: rgba(62, 191, 207, 0.35);
+  --footer-highlight-to: rgba(255, 216, 148, 0.35);
+  --footer-text: 0 0% 100%;
+  --footer-text-muted: rgba(255, 255, 255, 0.7);
+  --footer-text-soft: rgba(255, 255, 255, 0.6);
+  --footer-text-label: rgba(255, 255, 255, 0.5);
+  --footer-border: rgba(255, 255, 255, 0.1);
+  --background-overlay: rgba(255, 255, 255, 0.65);
+  --font-sans: "DM Sans", "Inter", "Segoe UI", "Roboto", system-ui, sans-serif;
+  --font-serif: "Playfair Display", "Georgia", "Times New Roman", serif;
+}
+
+@theme inline {
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+  --color-info: hsl(var(--info));
+  --radius-md: var(--radius);
+  --font-sans: var(--font-sans);
+  --font-serif: var(--font-serif);
+  --shadow-lg: 0 20px 40px -15px var(--shadow-primary);
+  --shadow-lg-secondary: 0 20px 40px -20px var(--shadow-secondary);
+
+  @keyframes accordion-down {
+    from {
+      height: 0;
+    }
+    to {
+      height: var(--radix-accordion-content-height);
+    }
+  }
+
+  @keyframes accordion-up {
+    from {
+      height: var(--radix-accordion-content-height);
+    }
+    to {
+      height: 0;
+    }
+  }
+
+  --animate-accordion-down: accordion-down 0.2s ease-out;
+  --animate-accordion-up: accordion-up 0.2s ease-out;
+}
+
+* {
+  @apply border-border;
+}
+
+html {
+  font-feature-settings: "rlig" 1, "calt" 1;
+  scroll-behavior: smooth;
+}
+
+body {
+  @apply text-foreground antialiased;
+  font-family: var(--font-sans), system-ui, sans-serif;
+  background:
+    radial-gradient(120% 120% at 10% 20%, hsl(var(--accent)) 0%, transparent 60%),
+    radial-gradient(80% 120% at 90% 0%, hsl(var(--secondary)) 0%, transparent 65%),
+    linear-gradient(180deg, hsl(var(--background)) 0%, var(--background-overlay) 100%);
+  min-height: 100vh;
+}
+
+a {
+  @apply underline-offset-4 transition-colors;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-serif), var(--font-sans), system-ui;
+  letter-spacing: -0.02em;
+}
+
+::selection {
+  background: hsl(var(--primary) / 0.25);
+}
+
+.markdown {
+  width: 100%;
+  line-height: 1.75;
+}
+
+.markdown h2 {
+  margin-top: 2.5rem;
+  margin-bottom: 1rem;
+  font-size: clamp(1.5rem, 3vw, 2.25rem);
+  font-weight: 600;
+  color: hsl(var(--foreground));
+}
+
+.markdown h3 {
+  margin-top: 2rem;
+  margin-bottom: 0.75rem;
+  font-size: clamp(1.25rem, 2.5vw, 1.75rem);
+  font-weight: 600;
+  color: hsl(var(--foreground));
+}
+
+.markdown p {
+  margin-bottom: 1.25rem;
+  color: hsl(var(--muted-foreground));
+}
+
+.markdown a {
+  color: hsl(var(--primary));
+  text-decoration: none;
+}
+
+.markdown a:hover {
+  text-decoration: underline;
+}
+
+.markdown ul {
+  list-style: disc;
+  padding-left: 1.5rem;
+  margin-bottom: 1.25rem;
+  color: hsl(var(--muted-foreground));
+}
+
+.markdown li {
+  margin-bottom: 0.5rem;
+}
+
+.markdown blockquote {
+  border-left: 3px solid hsl(var(--border));
+  padding-left: 1rem;
+  margin: 1.5rem 0;
+  color: hsl(var(--muted-foreground));
+  font-style: italic;
+}
+
+.markdown code {
+  font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.9rem;
+  padding: 0.1rem 0.4rem;
+  border-radius: 0.4rem;
+  background-color: hsl(var(--muted));
+  color: hsl(var(--foreground));
+}
+
+.markdown pre {
+  background-color: hsl(var(--code-block));
+  border-radius: 1rem;
+  border: 1px solid hsl(var(--border));
+  padding: 1.25rem 1.5rem;
+  overflow-x: auto;
+  margin: 1.5rem 0;
+}
+
+.markdown pre code {
+  background: transparent;
+  padding: 0;
+}
+
+select {
+  background-color: hsl(var(--glass-surface));
+  border-color: hsl(var(--glass-border));
+  color: hsl(var(--foreground));
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  border-width: 1px;
+  border-style: solid;
+  border-color: hsl(var(--glass-border));
+  outline: none;
+  box-shadow: 0 0 0 1px hsl(var(--glass-border));
+}
+
+.docs-content h1 {
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  font-size: clamp(2.5rem, 3vw, 3rem);
+}
+
+.docs-content h2 {
+  margin-top: 2.5rem;
+  margin-bottom: 1rem;
+  font-size: clamp(1.75rem, 2.5vw, 2.25rem);
+}
+
+.docs-content h3 {
+  margin-top: 2rem;
+  margin-bottom: 0.75rem;
+  font-size: clamp(1.35rem, 2vw, 1.75rem);
+}
+
+.docs-content h4 {
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+  font-size: 1.25rem;
+}
+
+.docs-content h5 {
+  margin-top: 1.25rem;
+  margin-bottom: 0.5rem;
+  font-size: 1.05rem;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.docs-content h6 {
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+  font-size: 0.95rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: hsl(var(--muted-foreground));
+}
+
+.docs-callout {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  border-radius: 0.75rem;
+  border: 1px solid hsl(var(--border));
+  background-color: hsl(var(--muted) / 0.3);
+  padding: 1.25rem;
+}

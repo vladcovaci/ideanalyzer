@@ -1,0 +1,20 @@
+import { VerifyEmailContent } from "@/components/auth/verify-email-content";
+import type { Metadata } from "next";
+import { Suspense } from "react";
+
+export const metadata: Metadata = {
+  title: "Verify Email",
+  description: "Verify your email address",
+};
+
+export default function VerifyEmailPage() {
+  return (
+    <div className="py-10 md:py-20 flex flex-col items-center justify-center gap-6 p-6 md:p-10">
+      <div className="flex w-full max-w-sm flex-col gap-6">
+        <Suspense fallback={<div>Loading...</div>}>
+          <VerifyEmailContent />
+        </Suspense>
+      </div>
+    </div>
+  );
+}

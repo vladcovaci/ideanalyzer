@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm install:*)",
+      "Bash(npx prisma:*)",
+      "Bash(npm run build:*)",
+      "Bash(npx shadcn@latest add progress)",
+      "Bash(npx shadcn@latest add:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
