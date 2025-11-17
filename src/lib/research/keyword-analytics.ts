@@ -136,7 +136,7 @@ export const buildFallbackKeywordAnalytics = (
   const seeds = selectKeywordSeeds(summary);
   const history = buildTrendHistory(6, 25);
 
-  const keywords = seeds.map((term, index) => ({
+  const keywords: KeywordInsight[] = seeds.map((term, index) => ({
     term,
     volume: Math.max(600 - index * 120, 120),
     growth: Number((Math.max(3, 12 - index * 2)).toFixed(2)),
@@ -146,6 +146,8 @@ export const buildFallbackKeywordAnalytics = (
       index === 0
         ? "Estimated demand based on summary keywords."
         : undefined,
+    cpc: null,
+    competition: null,
   }));
 
   return {
