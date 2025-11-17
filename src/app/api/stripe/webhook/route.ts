@@ -175,7 +175,7 @@ async function handleSubscriptionCreated(subscription: Stripe.Subscription) {
   const priceId = subscription.items.data[0]?.price.id;
 
   // Find user by Stripe customer ID
-  const user = await prisma.user.findUnique({
+  const user = await prisma.user.findFirst({
     where: { stripeCustomerId: customerId },
   });
 
