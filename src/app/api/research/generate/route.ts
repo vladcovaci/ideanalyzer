@@ -28,7 +28,7 @@ const isConversationMessage = (value: unknown): value is ConversationMessage => 
 // Configure route to allow longer execution time for Deep Research
 // Vercel: max 300s (5 min) for Pro, 900s (15 min) for Enterprise
 // Self-hosted: can be longer 
-export const maxDuration = 1200; // 20 minutes update
+export const maxDuration = 300; // 20 minutes update
 export const dynamic = 'force-dynamic';
 
 const requestSchema = z.object({
