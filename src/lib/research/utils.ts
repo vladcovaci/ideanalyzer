@@ -16,19 +16,16 @@ export const createEmptyUsage = (): TokenUsage => ({
 export const sumUsage = (
   usage: Array<TokenUsage | undefined>
 ): TokenUsage => {
-  return usage.reduce(
-    (acc, current) => {
-      if (!current) {
-        return acc;
-      }
-      return {
-        promptTokens: acc.promptTokens + current.promptTokens,
-        completionTokens: acc.completionTokens + current.completionTokens,
-        totalTokens: acc.totalTokens + current.totalTokens,
-      };
-    },
-    createEmptyUsage()
-  );
+  return usage.reduce<TokenUsage>((acc, current) => {
+    if (!current) {
+      return acc;
+    }
+    return {
+      promptTokens: acc.promptTokens + (current.promptTokens ?? 0),
+      completionTokens: acc.completionTokens + (current.completionTokens ?? 0),
+      totalTokens: acc.totalTokens + (current.totalTokens ?? 0),
+    };
+  }, createEmptyUsage());
 };
 
 export const usageFromOpenAI = (usage?: {

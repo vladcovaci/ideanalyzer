@@ -59,7 +59,7 @@ export const generateKeywordSeeds = async (summary: string): Promise<KeywordSeed
       rationale: keyword.rationale,
     }));
   } catch (error) {
-    const heuristicSeeds = selectKeywordSeeds(summary).map((term) => ({
+    const heuristicSeeds: KeywordSeed[] = selectKeywordSeeds(summary).map((term) => ({
       term,
       intent: "other",
       rationale: "Heuristic keyword derived from summary.",
