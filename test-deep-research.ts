@@ -17,7 +17,18 @@ async function testDeepResearch() {
     console.log('🔍 Running deep research (this will take a few minutes)...\n');
     console.log('Summary:', summary, '\n');
 
-    const result = await performDeepResearch(summary, { timeoutMs: 5 * 60 * 1000 });
+    // Run in synchronous mode for testing (background: false)
+    const result = await performDeepResearch(summary, {
+      timeoutMs: 5 * 60 * 1000,
+      background: false
+    });
+
+    // Check if this is a background job response
+    if ('jobId' in result) {
+      console.log('⚠️ Background job created. Job ID:', result.jobId);
+      console.log('Note: This test script only works in synchronous mode.');
+      return;
+    }
 
     console.log('✅ Deep Research completed!\n');
     console.log('Summary:', result.summary);

@@ -8,20 +8,17 @@ import { checkDeepResearchStatus } from "@/lib/research/deep-research";
 export const maxDuration = 10;
 export const dynamic = 'force-dynamic';
 
-type Params = {
-  params: {
-    jobId: string;
-  };
-};
-
-export async function GET(req: Request, { params }: Params) {
+export async function GET(
+  req: Request,
+  { params }: { params: Promise<{ jobId: string }> }
+) {
+  // In Next.js 15, params is a Promise
+  const { jobId } = await params;
   const session = await getServerSession(authOptions);
 
   if (!session?.user?.id) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
-
-  const { jobId } = params;
 
   if (!jobId) {
     return NextResponse.json(

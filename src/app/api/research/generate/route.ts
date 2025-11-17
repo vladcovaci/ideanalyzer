@@ -28,8 +28,8 @@ const isConversationMessage = (value: unknown): value is ConversationMessage => 
 // Configure route execution time
 // With background mode: completes in ~30-60s (fast modules only)
 // Without background mode: can take up to 800s (deep research runs synchronously)
-const backgroundModeEnabled = process.env.DEEP_RESEARCH_BACKGROUND === "true";
-export const maxDuration = backgroundModeEnabled ? 60 : 800;
+// Note: Set to 800 to support both modes. Background mode will complete in ~60s anyway.
+export const maxDuration = 800; // Supports both sync and background modes
 export const dynamic = 'force-dynamic';
 
 const requestSchema = z.object({
