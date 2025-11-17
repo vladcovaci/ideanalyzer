@@ -225,7 +225,7 @@ export function ResearchProcessingView() {
     if (!job) return;
 
     if (job.status === "pending") {
-      const nextJob = {
+      const nextJob: StoredResearchJob = {
         ...job,
         status: "in_progress",
         startedAt: job.startedAt || new Date().toISOString(),
