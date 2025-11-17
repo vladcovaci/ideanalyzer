@@ -5,7 +5,7 @@ import { trackServerEvent } from "@/lib/analytics/server";
 const bodySchema = z.object({
   event: z.string().min(1),
   distinctId: z.string().optional(),
-  properties: z.record(z.any()).optional(),
+  properties: z.record(z.string(), z.any()).optional(),
 });
 
 export async function POST(req: Request) {
