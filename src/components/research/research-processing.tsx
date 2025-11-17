@@ -72,7 +72,9 @@ export function ResearchProcessingView() {
   const [stepIndex, setStepIndex] = useState(0);
   const [progress, setProgress] = useState(5);
   const [timeLabel, setTimeLabel] = useState("This may take up to 40 minutes...");
-  const [statusMessage, setStatusMessage] = useState(PROCESS_STEPS[0]?.label);
+  const [statusMessage, setStatusMessage] = useState<string>(
+    PROCESS_STEPS[0]?.label ?? "Analyzing your idea..."
+  );
   const abortRef = useRef<AbortController | null>(null);
   const statusTrackerRef = useRef<ResearchJobStatus | null>(null);
 
@@ -109,7 +111,9 @@ export function ResearchProcessingView() {
 
   useEffect(() => {
     if (!job || job.status !== "in_progress") return;
-    setStatusMessage(currentStep?.label ?? PROCESS_STEPS[PROCESS_STEPS.length - 1]?.label);
+    setStatusMessage(
+      currentStep?.label ?? PROCESS_STEPS[PROCESS_STEPS.length - 1]?.label ?? statusMessage
+    );
     setProgress(currentStep?.range[1] ?? 100);
 
     if (stepIndex >= PROCESS_STEPS.length - 1) {
@@ -129,7 +133,7 @@ export function ResearchProcessingView() {
     }, currentStep?.duration ?? 2000);
 
     return () => clearTimeout(timer);
-  }, [job, stepIndex, currentStep]);
+  }, [job, stepIndex, currentStep, statusMessage]);
 
   const sendGenerationRequest = useCallback(
     async (activeJob: StoredResearchJob) => {
