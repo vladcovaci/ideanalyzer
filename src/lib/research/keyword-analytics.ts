@@ -1,6 +1,7 @@
 import { z } from "zod";
 import type {
   KeywordAnalyticsResult,
+  KeywordInsight,
   KeywordSeed,
   KeywordTrendPoint,
 } from "./types";
