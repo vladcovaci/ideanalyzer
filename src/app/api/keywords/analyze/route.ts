@@ -83,7 +83,7 @@ export async function POST(req: Request) {
     }
   }
 
-  let seeds;
+  let seeds: Awaited<ReturnType<typeof generateKeywordSeeds>>;
   try {
     seeds = await generateKeywordSeeds(summary);
   } catch (error) {
