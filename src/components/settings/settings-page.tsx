@@ -263,7 +263,7 @@ export function SettingsPage({ user }: SettingsPageProps) {
             </div>
             <Dialog>
               <DialogTrigger asChild>
-                <Button variant="destructive">Delete Account</Button>
+                <Button variant="secondary">Delete Account</Button>
               </DialogTrigger>
               <DialogContent>
                 <DialogHeader>
@@ -275,7 +275,7 @@ export function SettingsPage({ user }: SettingsPageProps) {
                 <DialogFooter>
                   <Button variant="outline">Cancel</Button>
                   <Button
-                    variant="destructive"
+                    variant="secondary"
                     onClick={handleDeleteAccount}
                     disabled={deleteLoading}
                   >
