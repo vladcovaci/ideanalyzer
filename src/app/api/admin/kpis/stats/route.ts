@@ -54,13 +54,12 @@ export async function GET() {
     }),
   ]);
 
-  const usersWithMultipleBriefs = await prisma.brief.groupBy({
-    by: ["userId"],
-    _count: { _all: true },
-    having: {
-      _count: { _all: { gt: 1 } },
-    },
-  });
+  const usersWithMultipleBriefs = (
+    await prisma.brief.groupBy({
+      by: ["userId"],
+      _count: { _all: true },
+    })
+  ).filter((group) => group._count._all > 1);
 
   const retention =
     totalUsers > 0
