@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { prisma } from "@/lib/db";
+import type { Prisma } from "@prisma/client";
 import { requireAdminSession } from "@/lib/admin";
 
 const filterSchema = z.object({
@@ -32,7 +33,7 @@ export async function GET(req: Request) {
   }
 
   const filters = parsed.data;
-  const where: Parameters<typeof prisma.feedback.findMany>[0]["where"] = {};
+  const where: Prisma.FeedbackWhereInput = {};
 
   if (filters.from || filters.to) {
     where.createdAt = {};
@@ -46,10 +47,12 @@ export async function GET(req: Request) {
 
   if (filters.cohort && filters.cohort !== "all") {
     where.user = {
-      role:
-        filters.cohort === "team"
-          ? { in: ["admin", "team"] }
-          : { notIn: ["admin", "team"] },
+      is: {
+        role:
+          filters.cohort === "team"
+            ? { in: ["admin", "team"] }
+            : { notIn: ["admin", "team"] },
+      },
     };
   }
 
