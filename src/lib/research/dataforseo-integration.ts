@@ -229,7 +229,7 @@ export async function fetchKeywordDetails(keyword: string): Promise<{
   }
 
   const trendData = trendsMap.get(keyword);
-  const growth = calculateGrowth(keywordData.monthly_searches);
+  const growth = calculateGrowth(keywordData.monthly_searches ?? undefined);
 
   return {
     term: keywordData.keyword,
