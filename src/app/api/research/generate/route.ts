@@ -34,7 +34,7 @@ export const dynamic = 'force-dynamic';
 const requestSchema = z.object({
   summary: z.string().min(20, "Conversation summary is required."),
   conversationId: z.string().min(1).optional(),
-  ideaId: z.string().min(1).optional(),
+  ideaId: z.string().min(1).optional(),   
 });
 
 const unauthorized = () =>
