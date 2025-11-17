@@ -58,7 +58,7 @@ export async function fetchKeywordAnalyticsFromDataForSEO(
   // Step 4: Format data for our system
   const formattedKeywords: KeywordInsight[] = keywordData.map((kw) => {
     const trendData = trendsMap.get(kw.keyword);
-    const growth = calculateGrowth(kw.monthly_searches);
+    const growth = calculateGrowth(kw.monthly_searches ?? undefined);
 
     return {
       term: kw.keyword,
