@@ -223,9 +223,9 @@ export function extractResearchInput(messages: Message[]): string | null {
   for (let i = messages.length - 1; i >= 0; i--) {
     const message = messages[i];
     if (message.role === "assistant") {
-      const match = message.content.match(
-        /Research Input:\s*(.+?)(?=\n\n|Perfect!|$)/is
-      );
+        const match = message.content.match(
+          /Research Input:\s*([\s\S]+?)(?=\n\n|Perfect!|$)/i
+        );
       if (match) {
         return match[1].trim();
       }
