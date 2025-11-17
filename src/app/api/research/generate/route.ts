@@ -25,10 +25,11 @@ const isConversationMessage = (value: unknown): value is ConversationMessage => 
   );
 };
 
-// Configure route to allow longer execution time for Deep Research
-// Vercel: max 300s (5 min) for Pro, 900s (15 min) for Enterprise
-// Self-hosted: can be longer 
-export const maxDuration = 800; // 20 minutes update
+// Configure route execution time
+// With background mode: completes in ~30-60s (fast modules only)
+// Without background mode: can take up to 800s (deep research runs synchronously)
+const backgroundModeEnabled = process.env.DEEP_RESEARCH_BACKGROUND === "true";
+export const maxDuration = backgroundModeEnabled ? 60 : 800;
 export const dynamic = 'force-dynamic';
 
 const requestSchema = z.object({
@@ -183,6 +184,89 @@ export async function POST(req: Request) {
     );
   }
 
+  // If background mode is enabled and we have a background job ID, create a ResearchJob
+  if (orchestrationResult.isBackgroundJob && orchestrationResult.backgroundJobId) {
+    console.log("[Research API] Background mode - creating ResearchJob in database");
+
+    try {
+      const researchJob = await prisma.researchJob.create({
+        data: {
+          userId,
+          ideaId,
+          conversationId,
+          summary: trimmedSummary,
+          status: "processing",
+          openaiJobId: orchestrationResult.backgroundJobId,
+          expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000), // 24 hours from now
+        },
+      });
+
+      console.log(`[Research API] ✅ ResearchJob created: ${researchJob.id}`);
+
+      // Update idea status
+      const generatedTitle =
+        orchestrationResult.result.description?.split("\n")[0]?.slice(0, 140) ||
+        trimmedSummary.slice(0, 140) ||
+        "Research brief";
+
+      await prisma.idea.updateMany({
+        where: { id: ideaId, userId },
+        data: { status: "analyzing", title: generatedTitle },
+      });
+
+      // Save partial brief (without proof signals)
+      let partialBriefId: string | null = null;
+      try {
+        const partialBrief = await prisma.brief.create({
+          data: {
+            ideaId,
+            userId,
+            summary: trimmedSummary,
+            content: orchestrationResult.result, // Has empty proof signals
+            generationTimeMs: orchestrationResult.result.generationTimeMs,
+            status: "draft", // Mark as draft since proof signals are pending
+            tokenUsage: orchestrationResult.tokenUsage,
+            errorLog: orchestrationResult.errors,
+            startedAt: new Date(orchestrationResult.startedAt),
+          },
+          select: { id: true },
+        });
+        partialBriefId = partialBrief.id;
+      } catch (error) {
+        console.error("[Research API] Failed to save partial brief:", error);
+      }
+
+      await trackServerEvent({
+        event: "research_brief_started_background",
+        distinctId: userId,
+        properties: {
+          idea_id: ideaId,
+          research_job_id: researchJob.id,
+          partial_brief_id: partialBriefId,
+        },
+      });
+
+      // Return immediately with the research job ID for polling
+      return NextResponse.json({
+        researchJobId: researchJob.id,
+        ideaId,
+        partialBriefId,
+        isBackgroundJob: true,
+        partialResult: orchestrationResult.result, // Includes everything except proof signals
+        message: "Research started. Proof signals are being generated in the background.",
+        tokenUsage: orchestrationResult.tokenUsage,
+        metadata: {
+          startedAt: orchestrationResult.startedAt,
+          status: "processing",
+        },
+      });
+    } catch (error) {
+      console.error("[Research API] Failed to create ResearchJob:", error);
+      // Fall through to sync flow as fallback
+    }
+  }
+
+  // Synchronous flow (background mode disabled or failed to create job)
   const status = orchestrationResult.errors.length
     ? "completed_with_warnings"
     : "completed";

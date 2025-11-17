@@ -566,17 +566,20 @@ const DEFAULT_PROOF_SIGNAL_FALLBACK_SUMMARY =
   "Deep research unavailable; signals generated from heuristic insights and public founder forums.";
 
 const executeProofSignals = async (
-  summary: string
+  summary: string,
+  options: { background?: boolean } = {}
 ): Promise<
   ComponentResult<{
     proofSignals: ProofSignal[];
     disclaimer?: string;
     summary?: string;
     marketStage?: string;
+    backgroundJobId?: string; // OpenAI job ID if background mode
   }>
 > => {
   // Check if deep research is enabled (can be disabled to avoid timeouts)
   const useDeepResearch = process.env.USE_DEEP_RESEARCH_FOR_PROOF_SIGNALS !== "false";
+  const backgroundMode = options.background ?? (process.env.DEEP_RESEARCH_BACKGROUND === "true");
 
   if (!useDeepResearch) {
     console.log("[Proof Signals] Deep Research disabled (USE_DEEP_RESEARCH_FOR_PROOF_SIGNALS=false)");
@@ -586,6 +589,7 @@ const executeProofSignals = async (
 
   try {
     console.log("[Proof Signals] Starting Deep Research...");
+    console.log("[Proof Signals] Background mode:", backgroundMode ? "enabled" : "disabled");
     console.log("[Proof Signals] Summary being researched:", summary.slice(0, 200));
 
     // Use env variable for timeout (default 5 minutes for deep research)
@@ -595,7 +599,23 @@ const executeProofSignals = async (
 
     const response = await performDeepResearch(summary, {
       timeoutMs: PROOF_SIGNALS_TIMEOUT_MS,
+      background: backgroundMode,
     });
+
+    // Background mode - return job ID immediately
+    if ('jobId' in response) {
+      console.log(`[Proof Signals] ✅ Background job created! Job ID: ${response.jobId}`);
+      return {
+        data: {
+          proofSignals: [], // No signals yet
+          backgroundJobId: response.jobId,
+          disclaimer: "Deep research started in background",
+          summary: "Research in progress...",
+        },
+      };
+    }
+
+    // Synchronous mode - got results
     console.log(`[Proof Signals] ✅ Deep Research completed! Found ${response.proofSignals.length} signals`);
     return {
       data: {
@@ -785,8 +805,12 @@ export const orchestrateResearchBriefComprehensive = async (
 
   // Step 3: Run ONLY Proof Signals with deep research (expensive but important)
   console.log("[Orchestrator] Running proof signals (deep research)...");
+
+  // Check if background mode is enabled
+  const useBackgroundMode = process.env.DEEP_RESEARCH_BACKGROUND === "true";
+
   const proofSignalsResult = await runComponent("proofSignals", () =>
-    executeProofSignals(input.summary)
+    executeProofSignals(input.summary, { background: useBackgroundMode })
   );
 
   mergeErrors(errors, proofSignalsResult);
@@ -798,6 +822,10 @@ export const orchestrateResearchBriefComprehensive = async (
     marketStage: "Emerging",
     disclaimer: "Generated from heuristics",
   };
+
+  // Check if this is a background job
+  const isBackgroundJob = !!proofSignalsBundle.backgroundJobId;
+  const backgroundJobId = proofSignalsBundle.backgroundJobId;
 
   // Build final result using hybrid approach
   const result: ResearchBriefResult = {
@@ -815,7 +843,12 @@ export const orchestrateResearchBriefComprehensive = async (
     generationTimeMs: new Date().getTime() - startedAt.getTime(),
   };
 
-  console.log("[Orchestrator] ✅ Brief generated using hybrid approach (cost-optimized)");
+  if (isBackgroundJob) {
+    console.log("[Orchestrator] ✅ Brief partially generated - proof signals running in background");
+    console.log(`[Orchestrator] Background job ID: ${backgroundJobId}`);
+  } else {
+    console.log("[Orchestrator] ✅ Brief generated using hybrid approach (cost-optimized)");
+  }
   console.log(`[Orchestrator] Total generation time: ${result.generationTimeMs}ms`);
 
   const completedAt = new Date();
@@ -830,6 +863,8 @@ export const orchestrateResearchBriefComprehensive = async (
       components: usageByComponent,
     },
     errors,
+    backgroundJobId,
+    isBackgroundJob,
   };
 };
 

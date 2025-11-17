@@ -217,3 +217,26 @@ model KeywordCache {
   @@index([expiresAt])
   @@map("keyword_cache")
 }
+
+model ResearchJob {
+  id               String    @id @default(auto()) @map("_id") @db.ObjectId
+  userId           String    @map("user_id") @db.ObjectId
+  ideaId           String?   @map("idea_id") @db.ObjectId
+  conversationId   String?   @map("conversation_id") @db.ObjectId
+  summary          String
+  status           String    @default("pending") // pending, processing, completed, failed
+  openaiJobId      String?   @map("openai_job_id") // OpenAI deep research job ID
+  result           Json?     // Final research result
+  error            String?   // Error message if failed
+  proofSignals     Json?     @map("proof_signals") // Proof signals from deep research
+  tokenUsage       Json?     @map("token_usage")
+  startedAt        DateTime  @default(now()) @map("started_at")
+  completedAt      DateTime? @map("completed_at")
+  expiresAt        DateTime  @map("expires_at") // Auto-delete after 24 hours
+
+  @@index([userId])
+  @@index([status])
+  @@index([openaiJobId])
+  @@index([expiresAt])
+  @@map("research_jobs")
+}

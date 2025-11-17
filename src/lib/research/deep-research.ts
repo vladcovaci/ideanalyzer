@@ -18,13 +18,24 @@ export type DeepResearchResponse = {
   usage?: TokenUsage;
 };
 
+export type DeepResearchBackgroundResponse = {
+  jobId: string;
+  status: "queued" | "in_progress";
+};
+
 /* ---------------------------------------
    MAIN: performDeepResearch
 ---------------------------------------- */
 export const performDeepResearch = async (
   summary: string,
-  { timeoutMs = DEEP_RESEARCH_TIMEOUT_MS }: { timeoutMs?: number } = {}
-): Promise<DeepResearchResponse> => {
+  {
+    timeoutMs = DEEP_RESEARCH_TIMEOUT_MS,
+    background = false
+  }: {
+    timeoutMs?: number;
+    background?: boolean;
+  } = {}
+): Promise<DeepResearchResponse | DeepResearchBackgroundResponse> => {
   const client = getDeepResearchClient();
   const start = Date.now();
 
@@ -65,7 +76,16 @@ export const performDeepResearch = async (
     console.log("[Deep Research] ✓ Job created, ID:", job.id);
     console.log("[Deep Research] Initial status:", job.status);
 
-    // Start polling immediately
+    // If background mode, return job ID immediately without polling
+    if (background) {
+      console.log("[Deep Research] Background mode enabled - returning job ID immediately");
+      return {
+        jobId: job.id,
+        status: job.status as "queued" | "in_progress",
+      };
+    }
+
+    // Start polling immediately (synchronous mode)
     result = await client.responses.retrieve(job.id);
     console.log("[Deep Research] Retrieved status:", result.status);
 
@@ -246,6 +266,90 @@ const fallbackDeepResearch = (
   disclaimer:
     "Deep Research unavailable — fallback summary provided. No proof signals extracted.",
 });
+
+/* ---------------------------------------
+   CHECK JOB STATUS (for background jobs)
+---------------------------------------- */
+export const checkDeepResearchStatus = async (
+  jobId: string
+): Promise<DeepResearchResponse & { status: string; isComplete: boolean }> => {
+  const client = getDeepResearchClient();
+
+  try {
+    const result = await client.responses.retrieve(jobId);
+    console.log(`[Deep Research] Job ${jobId} status: ${result.status}`);
+
+    // Still processing
+    if (result.status === "queued" || result.status === "in_progress") {
+      return {
+        status: result.status,
+        isComplete: false,
+        proofSignals: [],
+        disclaimer: "Research in progress",
+      };
+    }
+
+    // Failed
+    if (result.status === "failed") {
+      console.error("[Deep Research] Job failed:", result.error);
+      return {
+        status: "failed",
+        isComplete: true,
+        proofSignals: [],
+        disclaimer: "Deep Research failed",
+        summary: result.error?.message || "Research failed",
+      };
+    }
+
+    // Completed - extract results
+    const text = extractText(result);
+    if (!text.trim()) {
+      return {
+        status: "completed",
+        isComplete: true,
+        proofSignals: [],
+        disclaimer: "No output from deep research",
+      };
+    }
+
+    // Parse JSON
+    try {
+      const parsed = JSON.parse(text);
+      return {
+        status: "completed",
+        isComplete: true,
+        summary: parsed.summary || "",
+        proofSignals: parsed.proofSignals || [],
+        marketStage: parsed.marketStage || "unknown",
+        disclaimer: DEFAULT_PROOF_SIGNAL_DISCLAIMER,
+        usage: extractUsage(result),
+      };
+    } catch {
+      // Fallback heuristic parsing
+      const signals = extractProofSignalsHeuristically(text);
+      const finalSummary = extractSummaryHeuristically(text);
+
+      return {
+        status: "completed",
+        isComplete: true,
+        summary: finalSummary,
+        proofSignals: signals,
+        marketStage: detectMarketStage(finalSummary),
+        disclaimer: DEFAULT_PROOF_SIGNAL_DISCLAIMER,
+        usage: extractUsage(result),
+      };
+    }
+  } catch (error) {
+    console.error("[Deep Research] Error checking status:", error);
+    return {
+      status: "error",
+      isComplete: true,
+      proofSignals: [],
+      disclaimer: "Error checking research status",
+      summary: error instanceof Error ? error.message : "Unknown error",
+    };
+  }
+};
 
 /* ---------------------------------------
    UTIL

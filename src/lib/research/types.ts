@@ -197,6 +197,8 @@ export type ResearchOrchestrationResponse = {
     components: Partial<Record<ResearchComponent, TokenUsage>>;
   };
   errors: ResearchError[];
+  backgroundJobId?: string; // OpenAI job ID if deep research is running in background
+  isBackgroundJob?: boolean; // True if proof signals are being processed in background
 };
 
 export type ZodSchema<T> = z.ZodType<T>;

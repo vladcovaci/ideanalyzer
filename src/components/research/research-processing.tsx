@@ -135,6 +135,94 @@ export function ResearchProcessingView() {
     return () => clearTimeout(timer);
   }, [job, stepIndex, currentStep, statusMessage]);
 
+  const pollResearchStatus = useCallback(
+    async (researchJobId: string, ideaId: string) => {
+      const maxPolls = 240; // 240 * 5s = 20 minutes max
+      let pollCount = 0;
+
+      const poll = async () => {
+        if (pollCount >= maxPolls) {
+          setJob((prev) =>
+            prev
+              ? {
+                  ...prev,
+                  status: "failed",
+                  error: "Research took too long. Please try again.",
+                  updatedAt: new Date().toISOString(),
+                }
+              : prev
+          );
+          return;
+        }
+
+        try {
+          const response = await fetch(`/api/research/status/${researchJobId}`);
+          if (!response.ok) {
+            throw new Error("Failed to check research status");
+          }
+
+          const data = await response.json();
+
+          if (data.isComplete) {
+            if (data.status === "completed" && data.briefId) {
+              // Research completed successfully
+              setJob((prev) =>
+                prev
+                  ? {
+                      ...prev,
+                      status: "completed",
+                      briefId: data.briefId,
+                      ideaId,
+                      updatedAt: new Date().toISOString(),
+                    }
+                  : prev
+              );
+              setStepIndex(PROCESS_STEPS.length - 1);
+              setProgress(100);
+              setStatusMessage("Your research brief is ready!");
+
+              setTimeout(() => {
+                clearResearchJob();
+                router.push(`/brief/${data.briefId}`);
+              }, 1500);
+            } else {
+              // Research failed
+              setJob((prev) =>
+                prev
+                  ? {
+                      ...prev,
+                      status: "failed",
+                      error: data.error || "Research failed",
+                      updatedAt: new Date().toISOString(),
+                    }
+                  : prev
+              );
+            }
+          } else {
+            // Still processing - continue polling
+            pollCount++;
+            setTimeout(poll, 5000); // Poll every 5 seconds
+          }
+        } catch (error) {
+          console.error("Error polling research status:", error);
+          setJob((prev) =>
+            prev
+              ? {
+                  ...prev,
+                  status: "failed",
+                  error: "Failed to check research status",
+                  updatedAt: new Date().toISOString(),
+                }
+              : prev
+          );
+        }
+      };
+
+      poll();
+    },
+    [router]
+  );
+
   const sendGenerationRequest = useCallback(
     async (activeJob: StoredResearchJob) => {
       if (!activeJob.summary?.trim()) {
@@ -175,6 +263,16 @@ export function ResearchProcessingView() {
         }
 
         const data = await response.json();
+
+        // Check if this is a background job
+        if (data.isBackgroundJob && data.researchJobId) {
+          console.log("[Research] Background job started, polling for completion...");
+          // Start polling for completion
+          pollResearchStatus(data.researchJobId, data.ideaId);
+          return;
+        }
+
+        // Synchronous mode - job completed immediately
         setJob((prev) =>
           prev
             ? {
@@ -218,7 +316,7 @@ export function ResearchProcessingView() {
         setStatusMessage("Generation failed");
       }
     },
-    [router]
+    [router, pollResearchStatus]
   );
 
   useEffect(() => {
