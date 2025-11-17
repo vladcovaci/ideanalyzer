@@ -153,7 +153,7 @@ export const buildFallbackKeywordAnalytics = (
 
   return {
     primaryKeyword: keywords[0]?.term ?? seeds[0],
-    totalSearchVolume: keywords.reduce((acc, keyword) => acc + keyword.volume, 0),
+    totalSearchVolume: keywords.reduce((acc, keyword) => acc + (keyword.volume ?? 0), 0),
     averageGrowth:
       keywords.reduce((acc, keyword) => acc + keyword.growth, 0) /
       Math.max(keywords.length, 1),
