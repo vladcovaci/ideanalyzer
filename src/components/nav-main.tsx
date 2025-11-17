@@ -47,7 +47,7 @@ export function NavMain({
                     {item.badge && (
                       <Badge
                         variant="outline"
-                        className="ml-auto rounded-full border-[color:var(--glass-border)] bg-[color:var(--glass-surface)] px-2 py-0.5 text-[10px] font-medium"
+                        className="ml-auto rounded-md border-[color:var(--glass-border)] bg-[color:var(--glass-surface)] px-2 py-0.5 text-[10px] font-medium"
                       >
                         {item.badge}
                       </Badge>
@@ -61,7 +61,7 @@ export function NavMain({
                   {item.badge && (
                     <Badge
                       variant="outline"
-                      className="ml-auto rounded-full border-[color:var(--glass-border)] bg-[color:var(--glass-surface)] px-2 py-0.5 text-[10px] font-medium"
+                      className="ml-auto rounded-md border-[color:var(--glass-border)] bg-[color:var(--glass-surface)] px-2 py-0.5 text-[10px] font-medium"
                     >
                       {item.badge}
                     </Badge>

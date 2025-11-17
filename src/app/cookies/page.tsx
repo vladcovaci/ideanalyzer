@@ -4,7 +4,7 @@ import { getLegalContent } from "@/lib/legal";
 import { buildPageMetadata } from "@/lib/metadata";
 
 const description =
-  "Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore.";
+  "Learn how Idea Analyzer uses cookies and similar technologies to improve your experience.";
 
 export const metadata = {
   ...buildPageMetadata({
@@ -48,7 +48,7 @@ export default async function CookiesPage() {
           Cookie Policy
         </h1>
         <p className="text-lg text-muted-foreground">
-          Last updated: Lorem 2025
+          Last updated: March 2025
         </p>
       </div>
 
@@ -58,15 +58,15 @@ export default async function CookiesPage() {
       />
 
       <div className="mt-12 rounded-3xl border border-border bg-card p-8">
-        <h2 className="mb-4 text-xl font-semibold">Lorem ipsum?</h2>
+        <h2 className="mb-4 text-xl font-semibold">Cookie preferences</h2>
         <p className="mb-4 text-muted-foreground">
-          Consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+          You can manage or withdraw consent for non-essential cookies at any time. Reach out if you need help updating your choices.
         </p>
         <Link
-          href="/contact"
+          href="mailto:privacy@ideanalyzer.app"
           className="inline-flex items-center gap-2 text-sm font-medium text-primary hover:underline"
         >
-          Contact us
+          Contact us about cookies
           <svg
             className="h-4 w-4"
             fill="none"

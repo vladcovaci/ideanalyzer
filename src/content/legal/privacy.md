@@ -1,19 +1,37 @@
-## Lorem ipsum dolor sit amet
+## Privacy Policy
+This policy explains how Idea Analyzer collects, uses, and protects your data.
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+## Data we collect
+- **Account data:** name, email, authentication data.
+- **Content you provide:** ideas, briefs, feedback, and files you submit.
+- **Usage data:** feature usage, timestamps, pages viewed, error logs.
+- **Device data:** browser type, device identifiers, IP-derived region.
+- **Cookies:** see the Cookie Policy for details.
 
-## Consectetur adipiscing elit
+## How we use data
+- Provide and improve the service and its AI outputs.
+- Communicate about updates, security, and support.
+- Monitor performance, prevent abuse, and comply with legal obligations.
 
-Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+## Legal bases (EEA/UK)
+We process data based on consent (e.g., marketing cookies), contract (service delivery), and legitimate interests (security, analytics).
 
-## Sed do eiusmod tempor
+## Sharing
+- Service providers (hosting, analytics, support) under data protection terms.
+- Legal or safety requirements when necessary.
+We do not sell personal data.
 
-Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+## Retention
+We keep data while you maintain an account or as needed for the purposes above, then delete or anonymize it subject to legal requirements.
 
-## Excepteur sint occaecat
+## Security
+We use technical and organizational measures to protect data, but no system is 100% secure. Report issues to security@ideanalyzer.app.
 
-Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+## Your rights
+Where applicable, you may request access, correction, deletion, restriction, portability, or objection. Opt out of marketing at any time.
+
+## Children
+Idea Analyzer is not intended for users under 18. We delete data from minors when identified.
 
 ## Contact
-
-hello@lorem.test
+Privacy questions or requests: privacy@ideanalyzer.app. Data requests: support@ideanalyzer.app.

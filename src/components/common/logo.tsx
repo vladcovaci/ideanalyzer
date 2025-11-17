@@ -15,25 +15,25 @@ export function Logo({ className = "", asLink = false, href = "/" }: LogoProps) 
 
   const content = (
     <>
-      <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-br from-[hsl(var(--logo-gradient-start))] via-[hsl(var(--logo-gradient-mid))] to-[hsl(var(--logo-gradient-end))] text-base font-semibold text-[hsl(var(--primary-foreground))] shadow-[0_12px_30px_-12px_var(--logo-shadow)]">
-        SK
+      <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[hsl(var(--primary))] text-base font-semibold text-[hsl(var(--primary-foreground))] shadow-[0_12px_30px_-12px_var(--logo-shadow)]">
+        IA
       </span>
       <span className="sr-only md:not-sr-only md:inline md:text-base md:font-medium">
-        StartupKit
+        Idea Analyzer
       </span>
     </>
   );
 
   if (asLink) {
     return (
-      <Link href={href} className={baseClassName} aria-label="StartupKit home">
+      <Link href={href} className={baseClassName} aria-label="Idea Analyzer home">
         {content}
       </Link>
     );
   }
 
   return (
-    <div className={baseClassName} aria-label="StartupKit">
+    <div className={baseClassName} aria-label="Idea Analyzer">
       {content}
     </div>
   );

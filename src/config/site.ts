@@ -1,25 +1,20 @@
 export const siteConfig = {
-  name: "StartupKit",
+  name: "Idea Analyzer",
   description:
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-  url: "https://demo.startupkit.today",
+    "Analyze, validate, and plan product ideas with AI-assisted research and insights.",
+  url: "https://demo.ideaanalyzer.app",
   ogImage: "/og.png",
   locale: "en_US",
-  twitterHandle: "@startupkit",
-  keywords: [
-    "Lorem ipsum",
-    "Dolor sit amet",
-    "Consectetur adipiscing",
-    "Tempor incididunt",
-  ],
+  twitterHandle: "@ideaanalyzer",
+  keywords: ["idea validation", "product research", "market insights", "ai planning"],
   authors: [
     {
-      name: "Lorem Ipsum",
-      url: "https://example.com",
+      name: "Idea Analyzer",
+      url: "https://demo.ideaanalyzer.app",
     },
   ],
   links: {
-    github: "https://github.com/yourname/startupkit",
-    twitter: "https://twitter.com/startupkit",
+    github: "https://github.com/yourname/ideanalyzer",
+    twitter: "https://twitter.com/ideaanalyzer",
   },
 };

@@ -4,6 +4,7 @@ import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { prisma } from "@/lib/db";
 import { compare } from "bcryptjs";
+import { trackServerEvent } from "@/lib/analytics/server";
 
 export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma),
@@ -128,6 +129,32 @@ export const authOptions: NextAuthOptions = {
       await prisma.user.update({
         where: { id: user.id },
         data: { emailVerified: new Date() },
+      });
+    },
+    async signIn({ user, account }) {
+      await trackServerEvent({
+        event: "user_logged_in",
+        distinctId: user.id,
+        properties: {
+          provider: account?.provider ?? "credentials",
+          subscription_tier: "free",
+        },
+      });
+    },
+    async createUser({ user }) {
+      if ((user as { password?: string | null }).password) {
+        return;
+      }
+      await trackServerEvent({
+        event: "user_registered",
+        distinctId: user.id,
+        properties: {
+          method: "oauth",
+          user_email: user.email,
+          subscription_tier: "free",
+          registered_at:
+            (user as { createdAt?: Date }).createdAt ?? new Date().toISOString(),
+        },
       });
     },
   },

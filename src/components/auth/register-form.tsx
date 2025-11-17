@@ -20,7 +20,7 @@ import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import { useState } from "react";
 import { signIn } from "next-auth/react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 
 export function RegisterForm({
@@ -29,11 +29,13 @@ export function RegisterForm({
 }: React.ComponentProps<"div">) {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const callbackUrl = searchParams.get("callbackUrl") || "/dashboard";
 
   const handleGoogleRegister = async () => {
     setIsLoading(true);
     try {
-      await signIn("google", { callbackUrl: "/dashboard/onboarding" });
+      await signIn("google", { callbackUrl });
     } catch {
       toast.error("Failed to sign up with Google");
       setIsLoading(false);
@@ -209,7 +211,10 @@ export function RegisterForm({
                 </Button>
                 <FieldDescription className="text-center">
                   Already have an account?{" "}
-                  <Link href="/login" className="underline hover:text-foreground">
+                  <Link
+                    href={`/login${searchParams.toString() ? `?${searchParams.toString()}` : ""}`}
+                    className="underline hover:text-foreground"
+                  >
                     Login
                   </Link>
                 </FieldDescription>

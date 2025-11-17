@@ -8,9 +8,10 @@ import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 
 type DashboardShellProps = {
   children: ReactNode;
+  hideHeader?: boolean;
 };
 
-export function DashboardShell({ children }: DashboardShellProps) {
+export function DashboardShell({ children, hideHeader = false }: DashboardShellProps) {
   return (
     <SidebarProvider
       style={
@@ -22,7 +23,7 @@ export function DashboardShell({ children }: DashboardShellProps) {
     >
       <AppSidebar />
       <SidebarInset className="bg-transparent">
-        <SiteHeader />
+        {!hideHeader && <SiteHeader />}
         <div className="flex flex-1 flex-col">
           <div className="flex-1 pb-14">
             <div className="mx-auto flex w-full flex-col gap-6 px-4 pt-6 lg:px-10">

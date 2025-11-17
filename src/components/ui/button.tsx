@@ -3,11 +3,11 @@ import { cn } from "@/lib/utils";
 import { Slot } from "@/components/ui/slot";
 
 const baseStyles =
-  "relative inline-flex items-center justify-center whitespace-nowrap rounded-full text-sm font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 ring-offset-background cursor-pointer text-foreground";
+  "relative inline-flex items-center justify-center whitespace-nowrap rounded-xl text-sm font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 ring-offset-background cursor-pointer text-foreground";
 
 const variants = {
   default:
-    "bg-[hsl(var(--primary))] text-[hsl(var(--primary-foreground))] shadow-[0_20px_40px_-15px_var(--shadow-primary)] hover:brightness-110 text-white",
+    "bg-[hsl(var(--primary))] hover:bg-[hsl(var(--primary-hover))] text-[hsl(var(--primary-foreground))] shadow-[0_20px_40px_-15px_var(--shadow-primary)] text-white",
   outline:
     "border border-[color:var(--glass-border)] bg-[color:var(--glass-surface)] hover:bg-[color:var(--glass-surface-strong)] hover:text-foreground backdrop-blur text-foreground",
   ghost: "hover:bg-muted/60 hover:text-foreground",
@@ -17,8 +17,8 @@ const variants = {
 
 const sizes: Record<string, string> = {
   default: "h-11 px-6",
-  sm: "h-9 rounded-full px-4 text-xs",
-  lg: "h-12 rounded-full px-8 text-base",
+  sm: "h-9 rounded-xl px-4 text-xs",
+  lg: "h-12 rounded-xl px-8 text-base",
   icon: "h-11 w-11",
 };
 

@@ -4,7 +4,7 @@ import { getLegalContent } from "@/lib/legal";
 import { buildPageMetadata } from "@/lib/metadata";
 
 const description =
-  "Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore.";
+  "Review the Idea Analyzer Terms & Conditions covering usage, limitations, and your responsibilities.";
 
 export const metadata = {
   ...buildPageMetadata({
@@ -48,22 +48,22 @@ export default async function TermsPage() {
           Terms and Conditions
         </h1>
         <p className="text-lg text-muted-foreground">
-          Last updated: Lorem 2025
+          Last updated: March 2025
         </p>
       </div>
 
       <div className="markdown" dangerouslySetInnerHTML={{ __html: content }} />
 
       <div className="mt-12 rounded-3xl border border-border bg-card p-8">
-        <h2 className="mb-4 text-xl font-semibold">Lorem ipsum?</h2>
+        <h2 className="mb-4 text-xl font-semibold">Need something clarified?</h2>
         <p className="mb-4 text-muted-foreground">
-          Consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+          If you have questions about these terms or how Idea Analyzer uses your data, our team is here to help.
         </p>
         <Link
-          href="/contact"
+          href="mailto:support@ideanalyzer.app"
           className="inline-flex items-center gap-2 text-sm font-medium text-primary hover:underline"
         >
-          Contact us
+          Contact support
           <svg
             className="h-4 w-4"
             fill="none"

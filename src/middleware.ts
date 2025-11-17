@@ -25,7 +25,7 @@ export default withAuth(
   // If user is authenticated and tries to access auth pages, redirect to dashboard
     if (isAuthPage && isAuth) {
       return NextResponse.redirect(
-        new URL("/dashboard/onboarding", request.url)
+        new URL("/dashboard", request.url)
       );
   }
 
@@ -33,27 +33,6 @@ export default withAuth(
     if (!isAuth && request.nextUrl.pathname.startsWith("/dashboard")) {
       return NextResponse.redirect(new URL("/login", request.url));
   }
-
-  // If user is authenticated and not onboarded, redirect to onboarding
-    if (
-      isAuth &&
-      !token?.onboarded &&
-      !request.nextUrl.pathname.startsWith("/dashboard/onboarding") &&
-      request.nextUrl.pathname.startsWith("/dashboard")
-    ) {
-      return NextResponse.redirect(
-        new URL("/dashboard/onboarding", request.url)
-      );
-    }
-
-  // If user is onboarded and tries to access onboarding page, redirect to dashboard
-    if (
-      isAuth &&
-      token?.onboarded &&
-      request.nextUrl.pathname === "/dashboard/onboarding"
-    ) {
-      return NextResponse.redirect(new URL("/dashboard", request.url));
-    }
 
   // Optional: Enforce subscription tier for premium routes
   // Enable this by setting ENABLE_SUBSCRIPTION_ENFORCEMENT=true in .env

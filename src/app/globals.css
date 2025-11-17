@@ -1,62 +1,118 @@
 @import "tailwindcss";
+@plugin "@tailwindcss/typography";
 
 :root {
   color-scheme: light;
-  --background: 218 66% 97%;
-  --foreground: 228 30% 15%;
-  --muted: 214 55% 94%;
-  --muted-foreground: 226 20% 38%;
-  --accent: 199 92% 90%;
-  --accent-foreground: 214 36% 26%;
-  --border: 219 42% 92%;
-  --input: 220 40% 90%;
-  --ring: 229 87% 63%;
+
+  /* Primary Background */
+  --background: 33 77% 90%; /* #F9E7D1 */
+  --background-secondary: 33 77% 93%; /* softened tint of background */
+  --background-tertiary: 33 77% 96%; /* lighter tint for cards/sections */
+
+  /* Text Colors */
+  --foreground: 0 0% 10%; /* #1A1A1A - primary text */
+  --foreground-secondary: 0 0% 30%; /* #4D4D4D - secondary text */
+  --foreground-header: 17 46% 17%; /* #3E2217 - warm header text */
+
+  /* Accent Colors */
+  --accent-coral: 167 100% 33%; /* #FF6A3D */
+  --accent-sky: 211 100% 50%; /* #007AFF */
+  --accent-mint: 241 61% 59%; /* #5856D6 - purple accent */
+
+  /* Component Colors */
+  --muted: 33 40% 88%; /* soft beige for subtle surfaces */
+  --muted-foreground: 0 0% 30%; /* #4D4D4D */
+  --accent: 167 100% 33%; /* #FF6A3D */
+  --accent-foreground: 0 0% 100%; /* white */
+  --border: 33 25% 82%; /* gentle border color */
+  --input: 0 0% 100%; /* white for inputs */
+  --ring: 167 100% 33%; /* #00A884 focus ring */
   --radius: 1.5rem;
-  --card: 0 0% 100%;
-  --card-foreground: 228 30% 15%;
-  --primary: 229 87% 63%;
-  --primary-foreground: 0 0% 100%;
-  --secondary: 37 100% 87%;
-  --secondary-foreground: 222 44% 18%;
-  --info: 192 95% 88%; 
-  --glass-surface: rgba(255, 255, 255, 0.8);
-  --glass-surface-strong: rgba(255, 255, 255, 0.95);
-  --glass-border: rgba(255, 255, 255, 0.7);
-  --glass-shadow-strong: rgba(36, 52, 120, 0.6);
-  --glass-shadow-soft: rgba(36, 52, 120, 0.4);
-  --shadow-primary: rgba(86, 112, 255, 0.6);
-  --shadow-secondary: rgba(254, 198, 106, 0.9);
-  --shadow-elevated: rgba(32, 55, 125, 0.6);
-  --logo-gradient-start: 229 87% 70%;
-  --logo-gradient-mid: 229 87% 63%;
-  --logo-gradient-end: 214 89% 70%;
-  --logo-shadow: rgba(86, 112, 255, 0.8);
-  --footer-background: 225 40% 18%;
-  --footer-highlight-from: rgba(103, 124, 255, 0.35);
-  --footer-highlight-via: rgba(62, 191, 207, 0.35);
-  --footer-highlight-to: rgba(255, 216, 148, 0.35);
+  --card: 0 0% 100%; /* white cards */
+  --card-foreground: 0 0% 10%; /* #1A1A1A */
+
+  /* CTA Colors */
+  --primary: 167 100% 33%; /* #00A884 */
+  --primary-hover: 166 100% 28%; /* #00906F */
+  --primary-foreground: 0 0% 100%; /* white */
+
+  /* Secondary Actions */
+  --secondary: 211 100% 50%; /* #007AFF */
+  --secondary-foreground: 0 0% 100%; /* white */
+  --info: 241 61% 59%; /* #5856D6 */
+
+  /* Glass Overlays */
+  --glass-surface: rgba(255, 255, 255, 0.22);
+  --glass-surface-strong: rgba(255, 255, 255, 0.35);
+  --glass-border: rgba(255, 255, 255, 0.4);
+  --glass-shadow-strong: rgba(0, 0, 0, 0.08);
+  --glass-shadow-soft: rgba(0, 0, 0, 0.06);
+  --glass-blur: 20px;
+  --glass-blur-strong: 30px;
+
+  /* Shadows */
+  --shadow-primary: rgba(0, 168, 132, 0.32);
+  --shadow-secondary: rgba(0, 122, 255, 0.22);
+  --shadow-elevated: rgba(0, 0, 0, 0.1);
+  --shadow-glass: 0 4px 24px rgba(0, 0, 0, 0.08);
+
+  /* Logo Gradient */
+  --logo-gradient-start: 211 100% 50%; /* #007AFF */
+  --logo-gradient-mid: 241 61% 59%; /* #5856D6 */
+  --logo-gradient-end: 14 100% 62%; /* #FF6A3D */
+  --logo-shadow: rgba(0, 0, 0, 0.18);
+
+  /* Footer */
+  --footer-background: 167 100% 20%; /* deep teal base */
+  --footer-gradient: linear-gradient(135deg, #009E60 0%, #00443B 100%);
+  --footer-highlight-from: rgba(0, 168, 132, 0.22);
+  --footer-highlight-via: rgba(0, 122, 255, 0.12);
+  --footer-highlight-to: rgba(255, 106, 61, 0.12);
   --footer-text: 0 0% 100%;
-  --footer-text-muted: rgba(255, 255, 255, 0.7);
-  --footer-text-soft: rgba(255, 255, 255, 0.6);
-  --footer-text-label: rgba(255, 255, 255, 0.5);
-  --footer-border: rgba(255, 255, 255, 0.1);
-  --background-overlay: rgba(255, 255, 255, 0.65);
+  --footer-text-muted: rgba(255, 255, 255, 0.75);
+  --footer-text-soft: rgba(255, 255, 255, 0.65);
+  --footer-text-label: rgba(255, 255, 255, 0.55);
+  --footer-border: rgba(255, 255, 255, 0.15);
+
+  /* Provided palette aliases (copy-paste ready) */
+  --color-bg: #F9E7D1;
+  --color-cta: #00A884;
+  --color-cta-hover: #00906F;
+  --color-text-primary: #1A1A1A;
+  --color-text-secondary: #4D4D4D;
+  --color-text-header: #3E2217;
+  --color-accent-1: #FF6A3D;
+  --color-accent-2: #007AFF;
+  --color-accent-3: #5856D6;
+  --color-glass-bg: rgba(255, 255, 255, 0.22);
+  --color-glass-border: rgba(255, 255, 255, 0.4);
+
+  /* Other */
+  --background-overlay: rgba(249, 231, 209, 0.6);
   --font-sans: "DM Sans", "Inter", "Segoe UI", "Roboto", system-ui, sans-serif;
   --font-serif: "Playfair Display", "Georgia", "Times New Roman", serif;
 }
 
 @theme inline {
   --color-background: hsl(var(--background));
+  --color-background-secondary: hsl(var(--background-secondary));
+  --color-background-tertiary: hsl(var(--background-tertiary));
   --color-foreground: hsl(var(--foreground));
+  --color-foreground-secondary: hsl(var(--foreground-secondary));
+  --color-foreground-header: hsl(var(--foreground-header));
   --color-muted: hsl(var(--muted));
   --color-muted-foreground: hsl(var(--muted-foreground));
   --color-accent: hsl(var(--accent));
   --color-accent-foreground: hsl(var(--accent-foreground));
+  --color-accent-coral: hsl(var(--accent-coral));
+  --color-accent-sky: hsl(var(--accent-sky));
+  --color-accent-mint: hsl(var(--accent-mint));
   --color-border: hsl(var(--border));
   --color-input: hsl(var(--input));
   --color-card: hsl(var(--card));
   --color-card-foreground: hsl(var(--card-foreground));
   --color-primary: hsl(var(--primary));
+  --color-primary-hover: hsl(var(--primary-hover));
   --color-primary-foreground: hsl(var(--primary-foreground));
   --color-secondary: hsl(var(--secondary));
   --color-secondary-foreground: hsl(var(--secondary-foreground));
@@ -102,9 +158,10 @@ body {
   @apply text-foreground antialiased;
   font-family: var(--font-sans), system-ui, sans-serif;
   background:
-    radial-gradient(120% 120% at 10% 20%, hsl(var(--accent)) 0%, transparent 60%),
-    radial-gradient(80% 120% at 90% 0%, hsl(var(--secondary)) 0%, transparent 65%),
-    linear-gradient(180deg, hsl(var(--background)) 0%, var(--background-overlay) 100%);
+    radial-gradient(120% 120% at 12% 18%, rgba(255, 106, 61, 0.14) 0%, transparent 55%),
+    radial-gradient(110% 110% at 85% -5%, rgba(0, 122, 255, 0.16) 0%, transparent 60%),
+    radial-gradient(120% 110% at 40% 85%, rgba(0, 168, 132, 0.14) 0%, transparent 62%),
+    linear-gradient(180deg, #F9E7D1 0%, #F9E7D1 100%);
   min-height: 100vh;
 }
 
@@ -262,4 +319,90 @@ select {
   border: 1px solid hsl(var(--border));
   background-color: hsl(var(--muted) / 0.3);
   padding: 1.25rem;
+}
+
+/* Glassmorphism Utility Classes */
+.glass {
+  background: var(--glass-surface);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--shadow-glass);
+}
+
+.glass-strong {
+  background: var(--glass-surface-strong);
+  backdrop-filter: blur(var(--glass-blur-strong));
+  -webkit-backdrop-filter: blur(var(--glass-blur-strong));
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--shadow-glass);
+}
+
+/* Glass Panel with Gradient Backgrounds */
+.glass-panel-lavender {
+  position: relative;
+  overflow: hidden;
+}
+
+.glass-panel-lavender::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--gradient-lavender-pink);
+  opacity: 0.15;
+  z-index: -1;
+}
+
+.glass-panel-sunlight {
+  position: relative;
+  overflow: hidden;
+}
+
+.glass-panel-sunlight::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--gradient-sunlight);
+  opacity: 0.15;
+  z-index: -1;
+}
+
+.glass-panel-mint {
+  position: relative;
+  overflow: hidden;
+}
+
+.glass-panel-mint::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--gradient-mint-haze);
+  opacity: 0.15;
+  z-index: -1;
+}
+
+/* Hover Effects for Glass Elements */
+.glass:hover,
+.glass-strong:hover {
+  background: rgba(255, 255, 255, 0.4);
+  border-color: rgba(255, 255, 255, 0.45);
+  transform: translateY(-2px);
+  transition: all 0.3s ease;
+}
+
+/* Primary Button with Glassmorphism */
+.btn-glass-primary {
+  background: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid hsl(var(--primary) / 0.3);
+  box-shadow: 0 4px 16px hsl(var(--primary) / 0.2);
+  transition: all 0.3s ease;
+}
+
+.btn-glass-primary:hover {
+  background: hsl(var(--primary-hover));
+  box-shadow: 0 6px 24px hsl(var(--primary) / 0.3);
+  transform: translateY(-2px);
 }

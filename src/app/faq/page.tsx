@@ -64,7 +64,7 @@ export default function FAQPage() {
         <CtaSection
           title="Still have questions?"
           description="Our team is here to help. Reach out and we'll get back to you within 24 hours."
-          primaryCta={{ href: "/contact", label: "Contact support" }}
+          primaryCta={{ href: "/register", label: "Contact support" }}
           secondaryCta={{ href: "/pricing", label: "View pricing" }}
         />
       </div>

@@ -23,7 +23,7 @@ export default function NotFound() {
             <Link href="/">Lorem ipsum</Link>
           </Button>
           <Button asChild size="lg" variant="outline">
-            <Link href="/contact">Dolor sit</Link>
+            <Link href="/faq">Dolor sit</Link>
           </Button>
         </div>
 
@@ -58,7 +58,7 @@ export default function NotFound() {
             </Link>
 
             <Link
-              href="/services"
+              href="/blog"
               className="group flex items-center gap-3 rounded-2xl border border-border p-4 transition-all hover:border-primary/30 hover:bg-muted/50"
             >
               <svg

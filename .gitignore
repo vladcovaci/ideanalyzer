@@ -43,3 +43,12 @@ next-env.d.ts
 
 /src/generated/prisma
 # BMAD (local only)
+# BMAD (local only)
+.bmad-core/
+.bmad-*/
+
+docs
+
+.env.example
+.env.example
+.env.example

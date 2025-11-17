@@ -150,7 +150,7 @@ export default function NotificationsPage() {
           <div>
             <h1 className="text-3xl font-semibold tracking-tight">Stay in the loop</h1>
             <p className="text-muted-foreground max-w-2xl">
-              Tailor the updates you receive from StartupKit so you only see what matters to your workflow.
+              Tailor the updates you receive from Idea Analyzer so you only see what matters to your workflow.
             </p>
           </div>
           <Badge

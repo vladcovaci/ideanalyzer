@@ -176,7 +176,7 @@ export default async function BlogPostPage({ params }: Props) {
               <Link href="/pricing">View pricing</Link>
             </Button>
             <Button asChild size="lg" variant="outline">
-              <Link href="/contact">Contact us</Link>
+              <Link href="/faq">Contact us</Link>
             </Button>
           </div>
         </div>

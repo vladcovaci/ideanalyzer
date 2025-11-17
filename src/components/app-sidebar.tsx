@@ -1,12 +1,10 @@
 "use client";
 import {
-  IconChartBar,
   IconDashboard,
   IconCreditCard,
-  IconListDetails,
   IconSettings,
   IconNotification,
-  IconHelp,
+  IconMessageChatbot,
 } from "@tabler/icons-react";
 import { useSession } from "next-auth/react";
 
@@ -32,29 +30,10 @@ const navigationData = {
       icon: IconDashboard,
     },
     {
-      title: "Starter Feature",
-      url: "/dashboard/starter",
-      icon: IconListDetails,
-      badge: "Starter",
+      title: "Analyze Idea",
+      url: "/dashboard/analyze",
+      icon: IconMessageChatbot,
     },
-    {
-      title: "Growth Feature",
-      url: "/dashboard/growth",
-      icon: IconListDetails,
-      badge: "Growth",
-    },
-    {
-      title: "Scale Feature",
-      url: "/dashboard/scale",
-      icon: IconListDetails,
-      badge: "Scale",
-    },
-    {
-      title: "Analytics",
-      url: "/dashboard/analytics",
-      icon: IconChartBar,
-    },
-
   ],
 
   navSecondary: [
@@ -72,11 +51,6 @@ const navigationData = {
       title: "Notifications",
       url: "/dashboard/notifications",
       icon: IconNotification,
-    },
-    {
-      title: "Support",
-      url: "/dashboard/support",
-      icon: IconHelp,
     },
   ],
 };

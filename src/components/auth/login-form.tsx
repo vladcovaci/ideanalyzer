@@ -18,9 +18,9 @@ import {
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { signIn } from "next-auth/react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 
 export function LoginForm({
@@ -29,11 +29,24 @@ export function LoginForm({
 }: React.ComponentProps<"div">) {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const callbackUrl = searchParams.get("callbackUrl") || "/dashboard";
+  const reason = searchParams.get("reason");
+
+  useEffect(() => {
+    // Show contextual message if redirected from idea analysis
+    if (reason === "analyze") {
+      toast.info("Please log in to analyze your idea", {
+        description: "Your idea has been saved and will be ready for analysis after login.",
+        duration: 5000,
+      });
+    }
+  }, [reason]);
 
   const handleGoogleLogin = async () => {
     setIsLoading(true);
     try {
-      await signIn("google", { callbackUrl: "/dashboard/onboarding" });
+      await signIn("google", { callbackUrl });
     } catch {
       toast.error("Failed to login with Google");
       setIsLoading(false);
@@ -91,7 +104,7 @@ export function LoginForm({
       }
 
       toast.success("Logged in successfully");
-      router.push("/dashboard/onboarding");
+      router.push(callbackUrl);
       router.refresh();
     } catch {
       toast.error("An unexpected error occurred");

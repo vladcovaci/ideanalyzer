@@ -119,7 +119,7 @@ export default function OnboardingPage() {
                 </div>
               ))}
             </div>
-            <CardTitle className="text-2xl">Welcome to StartupKit</CardTitle>
+            <CardTitle className="text-2xl">Welcome to Idea Analyzer</CardTitle>
             <CardDescription>
               Finish the guided setup to unlock your dashboard.
             </CardDescription>

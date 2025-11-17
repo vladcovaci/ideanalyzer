@@ -76,15 +76,16 @@ export function CookieBanner({ variant = "live" }: CookieBannerProps) {
         <div className="space-y-4">
           <div className="space-y-2 pb-3">
             <h2 className="text-lg font-semibold text-foreground">
-              Lorem ipsum dolor sit amet
+              We use cookies to improve your experience
             </h2>
             <p className="text-sm text-muted-foreground">
-              Consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+              Essential cookies keep Idea Analyzer secure and working. Optional analytics help us improve
+              product quality. You can change your choice anytime.
             </p>
             <p className="text-xs text-muted-foreground">
-              Lorem ipsum{" "}
+              Read more in our{" "}
               <a href="/cookies" className="underline">
-                dolor sit amet
+                Cookie Policy
               </a>
               .
             </p>
@@ -96,10 +97,10 @@ export function CookieBanner({ variant = "live" }: CookieBannerProps) {
               onClick={handleDismiss}
               className="sm:w-auto"
             >
-              Lorem only
+              Essential only
             </Button>
             <Button size="lg" variant="default" onClick={handleAccept} className="sm:w-auto">
-              Ipsum consent
+              Accept all cookies
             </Button>
           </div>
         </div>
