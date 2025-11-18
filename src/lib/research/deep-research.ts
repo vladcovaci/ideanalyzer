@@ -140,15 +140,26 @@ export const performDeepResearch = async (
   }
 
   // Extract text
+  console.log("[Deep Research] Extracting text from response...");
   const text = extractText(result);
+
   if (!text.trim()) {
-    console.error("[Deep Research] ❌ No output text");
+    console.error("[Deep Research] ❌ No output text found");
+    console.error("[Deep Research] Response ID:", result.id);
+    console.error("[Deep Research] Response status:", result.status);
     return fallbackDeepResearch(summary, "No output");
   }
 
+  console.log(`[Deep Research] ✓ Extracted ${text.length} characters of text`);
+  console.log("[Deep Research] First 200 chars:", text.slice(0, 200));
+
   // Try parsing JSON
   try {
+    console.log("[Deep Research] Attempting to parse JSON...");
     const parsed = JSON.parse(text);
+
+    console.log("[Deep Research] ✓ JSON parsed successfully");
+    console.log("[Deep Research] Proof signals found:", parsed.proofSignals?.length || 0);
 
     return {
       summary: parsed.summary || "",
@@ -157,13 +168,17 @@ export const performDeepResearch = async (
       disclaimer: DEFAULT_PROOF_SIGNAL_DISCLAIMER,
       usage: extractUsage(result),
     };
-  } catch {
-    console.warn("[Deep Research] ⚠️ JSON parse failed, using fallback parsers");
+  } catch (parseError) {
+    console.warn("[Deep Research] ⚠️ JSON parse failed:", parseError instanceof Error ? parseError.message : String(parseError));
+    console.warn("[Deep Research] Text that failed to parse:", text.slice(0, 500));
+    console.warn("[Deep Research] Using fallback heuristic parsers");
   }
 
   // Fallback heuristic parsing
   const signals = extractProofSignalsHeuristically(text);
   const finalSummary = extractSummaryHeuristically(text);
+
+  console.log(`[Deep Research] Heuristic parsing found ${signals.length} proof signals`);
 
   return {
     summary: finalSummary,
@@ -178,20 +193,53 @@ export const performDeepResearch = async (
    TEXT EXTRACTION (FIXED FOR NEW RESPONSES API)
 ---------------------------------------- */
 const extractText = (response: Response): string => {
+  // Method 1: Use the convenient output_text field (recommended by OpenAI)
+  // This field automatically extracts all text from the response
+  if (response.output_text && typeof response.output_text === "string") {
+    const text = response.output_text.trim();
+    if (text) {
+      console.log("[Deep Research] ✓ Extracted text from output_text field:", text.slice(0, 100) + "...");
+      return text;
+    }
+  }
+
+  // Method 2: Fallback to parsing the output array manually
   if (!Array.isArray(response.output)) {
-    console.error("[Deep Research] No output[]");
+    console.error("[Deep Research] No output[] array and no output_text field");
+    console.error("[Deep Research] Response structure:", JSON.stringify({
+      id: response.id,
+      status: response.status,
+      hasOutputText: !!response.output_text,
+      hasOutput: !!response.output,
+      outputType: Array.isArray(response.output) ? 'array' : typeof response.output
+    }, null, 2));
     return "";
   }
 
+  console.log(`[Deep Research] Parsing output array with ${response.output.length} items`);
+
   const collected: string[] = [];
 
-  for (const item of response.output) {
-    if (item.type !== "message") continue;
-    if (!item.content) continue;
+  for (let i = 0; i < response.output.length; i++) {
+    const item = response.output[i];
+    console.log(`[Deep Research] Output item ${i}: type=${item.type}`);
 
-    for (const block of item.content) {
+    // Skip non-message items (like reasoning, tool calls, etc.)
+    if (item.type !== "message") continue;
+    if (!item.content) {
+      console.warn(`[Deep Research] Message item ${i} has no content`);
+      continue;
+    }
+
+    console.log(`[Deep Research] Message item ${i} has ${item.content.length} content blocks`);
+
+    for (let j = 0; j < item.content.length; j++) {
+      const block = item.content[j];
+      console.log(`[Deep Research] Content block ${j}: type=${block.type}`);
+
       if (block.type === "output_text" && typeof block.text === "string") {
         collected.push(block.text.trim());
+        console.log(`[Deep Research] ✓ Extracted ${block.text.length} chars from content block ${j}`);
       }
     }
   }
@@ -199,7 +247,10 @@ const extractText = (response: Response): string => {
   const result = collected.join("\n").trim();
 
   if (!result) {
-    console.error("[Deep Research] ⚠️ No output_text blocks found");
+    console.error("[Deep Research] ⚠️ No output_text blocks found in array parsing");
+    console.error("[Deep Research] Full response.output structure:", JSON.stringify(response.output, null, 2));
+  } else {
+    console.log(`[Deep Research] ✓ Extracted ${result.length} total chars from output array`);
   }
 
   return result;
@@ -302,8 +353,11 @@ export const checkDeepResearchStatus = async (
     }
 
     // Completed - extract results
+    console.log(`[Deep Research] Job ${jobId} completed - extracting results`);
     const text = extractText(result);
+
     if (!text.trim()) {
+      console.error(`[Deep Research] Job ${jobId} completed but has no output text`);
       return {
         status: "completed",
         isComplete: true,
@@ -312,9 +366,14 @@ export const checkDeepResearchStatus = async (
       };
     }
 
+    console.log(`[Deep Research] Job ${jobId} extracted ${text.length} chars`);
+
     // Parse JSON
     try {
+      console.log(`[Deep Research] Job ${jobId} parsing JSON...`);
       const parsed = JSON.parse(text);
+      console.log(`[Deep Research] Job ${jobId} ✓ parsed successfully with ${parsed.proofSignals?.length || 0} signals`);
+
       return {
         status: "completed",
         isComplete: true,
@@ -324,10 +383,15 @@ export const checkDeepResearchStatus = async (
         disclaimer: DEFAULT_PROOF_SIGNAL_DISCLAIMER,
         usage: extractUsage(result),
       };
-    } catch {
+    } catch (parseError) {
+      console.warn(`[Deep Research] Job ${jobId} JSON parse failed:`, parseError instanceof Error ? parseError.message : String(parseError));
+      console.warn(`[Deep Research] Job ${jobId} using fallback heuristic parsing`);
+
       // Fallback heuristic parsing
       const signals = extractProofSignalsHeuristically(text);
       const finalSummary = extractSummaryHeuristically(text);
+
+      console.log(`[Deep Research] Job ${jobId} heuristic parsing found ${signals.length} signals`);
 
       return {
         status: "completed",
